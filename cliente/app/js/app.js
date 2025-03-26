@@ -7,7 +7,7 @@
 // Importaciones para las ayudas
 import { listarDocumentos } from "../casos_de_uso/documentos/index.js";
 import { listarGeneros } from "../casos_de_uso/generos/index.js";
-import { guardar_usuario } from "../casos_de_uso/usuarios/index.js";
+import { guardar_usuario, listar_Usuario } from "../casos_de_uso/usuarios/index.js";
 import {
   tiene_valores,
   validar_campos,
@@ -30,13 +30,14 @@ const email = document.querySelector("#correo");
 const tipoDocumento = document.querySelector("#tipo_documento");
 const documento = document.querySelector('#documento');
 const generos = document.querySelector('#generos');
+const tabla = document.querySelector('#tabla')
 
 /**
  * ****************************************
  * Programos los Metodos
  * ****************************************
  */
-const cargar_pagina = async () => {
+const cargar_formulario = async () => {
 
   // Cargamos los generos en el select
   const arrayGeneros = await listarGeneros();
@@ -70,6 +71,48 @@ const cargar_pagina = async () => {
 
  }
 
+const cargar_tabla = async () => {
+  const usuarios = await listar_Usuario();
+ const tabla_cuerpo = tabla.querySelector("tbody");
+  
+usuarios.forEach(usuario => {
+  const fila = document.createElement("tr");
+const tdNombre = document.createElement("td");
+const tdApellido = document.createElement("td");
+const tdTelefono = document.createElement("td");
+const tdCorreo = document.createElement("td");
+const tdDocumento = document.createElement("td");
+const tdbotonera = document.createElement("td")
+const botonera = document.createElement("div");
+const btneditar = document.createElement("button");
+const btneliminar = document.createElement("button");
+
+botonera.append(btneditar,btneliminar);
+tdbotonera.append(botonera);
+
+
+tdNombre.textContent = usuario.nombre;
+tdApellido.textContent = usuario.apellidos;
+tdTelefono.textContent = usuario.telefono;
+tdCorreo.textContent = usuario.correo;
+tdDocumento.textContent = usuario.documento;
+
+btneditar.textContent = "Editar";
+btneliminar.textContent = "Eliminar";
+
+botonera.classList.add("botonera");
+btneditar.classList.add("btn", "btn--samall");
+btneliminar.classList.add("btn", "btn-samall", "btn--danger");
+
+fila.append(tdNombre, tdApellido, tdTelefono, tdCorreo, tdDocumento);
+
+tabla_cuerpo.append(fila);
+fila.append(tdbotonera);
+
+   }) 
+}
+
+
 // Función asincrona para poder manipular las peticiones y guardar los datos del formulario
 const guardar = async (e) => {
   // Detenemos el comportamiento por defecto del formulario
@@ -100,7 +143,9 @@ const guardar = async (e) => {
 
 // Evento que se ejecuta cuando el documento se ha cargado
 document.addEventListener("DOMContentLoaded", () => {
-  cargar_pagina();
+  cargar_formulario();
+  cargar_tabla();
+
 });
 
 nombre.addEventListener("keydown", son_letras);
