@@ -29,7 +29,7 @@
   ],
   "usuarios": [
     {
-      "id": "0b47",
+      "id": "0fbb",
       "genero": "1",
       "nombre": "Lina Marcela",
       "apellidos": "dndndndn becerra",
@@ -39,14 +39,14 @@
       "documento": "626619"
     },
     {
-      "id": "78fe",
-      "genero": "1",
+      "id": "20b4",
+      "genero": "2",
       "nombre": "Lina Marcela",
-      "apellidos": "dndndndn becerra",
+      "apellidos": "be",
       "telefono": "3043707518",
       "correo": "jfbeccera@gmail.com",
-      "tipo_documento": "2",
-      "documento": "65656464"
+      "tipo_documento": "1",
+      "documento": "626619"
     },
     {
       "id": "8234",
@@ -69,10 +69,30 @@
       "documento": "626619"
     },
     {
-      "id": "494f",
-      "genero": "3",
+      "id": "20b4",
+      "genero": "2",
       "nombre": "Lina Marcela",
       "apellidos": "be",
+      "telefono": "3043707518",
+      "correo": "jfbeccera@gmail.com",
+      "tipo_documento": "1",
+      "documento": "626619"
+    },
+    {
+      "id": "8234",
+      "genero": "1",
+      "nombre": "John",
+      "apellidos": "Becerra",
+      "telefono": "3160410637",
+      "correo": "jfbeccera@gmail.com",
+      "tipo_documento": "1",
+      "documento": "626619"
+    },
+    {
+      "id": "0fbb",
+      "genero": "1",
+      "nombre": "Lina Marcela",
+      "apellidos": "dndndndn becerra",
       "telefono": "3043707518",
       "correo": "jfbeccera@gmail.com",
       "tipo_documento": "1",
@@ -89,34 +109,14 @@
       "documento": "626619"
     },
     {
-      "id": "93a0",
-      "genero": "3",
-      "nombre": "Neque et quo dolor m",
-      "apellidos": "Pariatur Sunt reru",
-      "telefono": "Minus eveniet qui i",
-      "correo": "sosakelyxe@mailinator.com",
-      "tipo_documento": "3",
-      "documento": "Ab quos placeat sit"
-    },
-    {
-      "id": "329e",
-      "genero": "1",
-      "nombre": "Illum qui rerum ex ",
-      "apellidos": "Duis saepe quia aut ",
-      "telefono": "Omnis deleniti dolor",
-      "correo": "fivybuhiw@mailinator.com",
-      "tipo_documento": "2",
-      "documento": "12345687"
-    },
-    {
-      "id": "e32b",
+      "id": "0a97",
       "genero": "2",
       "nombre": "andres",
       "apellidos": "arias",
-      "telefono": "311111",
-      "correo": "lache@hotmail.com",
-      "tipo_documento": "1",
-      "documento": "9494959595"
+      "telefono": "32561545",
+      "correo": "lalalalal@hotmail.com",
+      "tipo_documento": "2",
+      "documento": "10974"
     }
   ]
 }
