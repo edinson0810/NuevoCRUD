@@ -29,14 +29,14 @@
   ],
   "usuarios": [
     {
-      "id": "0fbb",
-      "genero": "1",
+      "genero": "2",
       "nombre": "Lina Marcela",
-      "apellidos": "dndndndn becerra",
+      "apellidos": " becerra  TORRES",
       "telefono": "3043707518",
       "correo": "jfbeccera@gmail.com",
       "tipo_documento": "1",
-      "documento": "626619"
+      "documento": "626619",
+      "id": "0fbb"
     },
     {
       "id": "20b4",
@@ -109,14 +109,14 @@
       "documento": "626619"
     },
     {
-      "id": "0a97",
       "genero": "2",
       "nombre": "andres",
-      "apellidos": "arias",
+      "apellidos": "arias ",
       "telefono": "32561545",
       "correo": "lalalalal@hotmail.com",
       "tipo_documento": "2",
-      "documento": "10974"
+      "documento": "10974",
+      "id": "0a97"
     }
   ]
 }
