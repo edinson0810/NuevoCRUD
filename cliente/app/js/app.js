@@ -7,85 +7,61 @@
 // Importaciones para las ayudas
 import { listarDocumentos } from "../casos_de_uso/documentos/index.js";
 import { listarGeneros } from "../casos_de_uso/generos/index.js";
-import { guardar_usuario, listar_Usuario, eliminar_usuario_por_id, buscar_usuario_por_id, actualizar_usuario } from "../casos_de_uso/usuarios/index.js";
+import { guardar_usuario, listar_Usuario, eliminar_usuario_por_id, buscar_usuario_por_id,
+   actualizar_usuario, actualizarTabla } from "../casos_de_uso/usuarios/index.js";
 import { tiene_valores, validar_campos, es_numero, son_letras, es_correo } from "../helpers/index.js";
 
 // ** Definir variables **
-const formulario = document.querySelector("#form");
-const nombre = document.querySelector("#nombre");
-const apellidos = document.querySelector("#apellidos");
-const telefono = document.querySelector("#telefono");
+const formulario = document.querySelector('#form');
+const nombre = document.querySelector('#nombre');
+const apellidos = document.querySelector('#apellidos');
+const telefono = document.querySelector('#telefono');
 const email = document.querySelector("#correo");
 const tipoDocumento = document.querySelector("#tipo_documento");
-const documento = document.querySelector("#documento");
-const generos = document.querySelector("#generos");
-const tabla = document.querySelector("#tabla tbody"); // Apuntar al tbody directamente
+const documento = document.querySelector('#documento');
+const generos = document.querySelector('#generos');
+const tabla = document.querySelector("#tabla");
 const identificador = document.querySelector("#identificador");
 
-// ** Cargar datos en selects **
-const cargar_formulario = async () => {
-  const arrayGeneros = await listarGeneros();
-  const arrayDocumentos = await listarDocumentos();
+// console.log(tabla);
 
-  generos.innerHTML = ""; // Limpiar antes de agregar
+/**
+ * ****************************************
+ * Programos los Metodos
+ * ****************************************
+ */
+const cargar_formulario = async () => {
+
+  // Cargamos los generos en el select
+  const arrayGeneros = await listarGeneros();
+  const arrayDocumentos = await listarDocumentos()
+
   arrayGeneros.forEach((genero) => {
     const label = document.createElement("label");
     const input = document.createElement("input");
     label.textContent = genero.nombre;
     label.setAttribute("for", genero.nombre);
+    label.textContent = genero.nombre;
     label.classList.add("form__label");
-
     input.setAttribute("type", "radio");
     input.setAttribute("name", "genero");
     input.setAttribute("id", genero.nombre);
     input.setAttribute("value", genero.id);
-    input.dataset.required = true;
-
+    input.setAttribute("data-required", true);
     generos.append(label, input);
   });
 
-  tipoDocumento.innerHTML = '<option value="">Seleccione...</option>'; // Limpiar antes de agregar
+  const option = document.createElement("option");
+  option.textContent = "Seleccione...";
+  tipoDocumento.append(option);
   arrayDocumentos.forEach((documento) => {
     const option = document.createElement("option");
     option.textContent = documento.nombre;
     option.value = documento.id;
     tipoDocumento.append(option);
   });
-};
+}
 
-// ** Cargar tabla de usuarios **
-const cargar_tabla = async () => {
-  const usuarios = await listar_Usuario();
-  tabla.innerHTML = ""; // Limpiar tabla antes de agregar nuevas filas
-
-  usuarios.forEach((usuario) => {
-    crearFila(usuario);
-  });
-};
-
-// ** Crear fila en la tabla **
-const crearFila = ({ id, nombre, apellidos, telefono, correo, documento }) => {
-  const tr = document.createElement("tr");
-  tr.setAttribute("id", `user_${id}`);
-
-  tr.innerHTML = `
-    <td>${nombre}</td>
-    <td>${apellidos}</td>
-    <td>${telefono}</td>
-    <td>${correo}</td>
-    <td>${documento}</td>
-    <td>
-      <div class="botonera">
-        <button class="btn btn--small editar" data-id="${id}">Editar</button>
-        <button class="btn btn--small btn--danger eliminar" data-id="${id}">Eliminar</button>
-      </div>
-    </td>
-  `;
-
-  tabla.appendChild(tr);
-};
-
-// ** Llenar formulario para editar usuario **
 const llenado = async (e) => {
   const id = e.target.dataset.id;
   const data = await buscar_usuario_por_id(id);
@@ -95,60 +71,140 @@ const llenado = async (e) => {
   apellidos.value = data.apellidos;
   telefono.value = data.telefono;
   correo.value = data.correo;
-  tipoDocumento.value = data.tipo_documento;
+  tipoDocumento.selectedIndex = data.tipo_documento;
   documento.value = data.documento;
 
-  generos.querySelectorAll('input[type=radio]').forEach((input) => {
-    input.checked = input.value == data.genero;
+  const radios = generos.querySelectorAll('input[type=radio]')
+
+  radios.forEach((elemento) => {
+    elemento.checked = elemento.value == data.genero;
+  })
+
+}
+
+const cargar_tabla = async () => {
+  const usuarios = await listar_Usuario();
+  usuarios.forEach(usuario => {
+    crearFila(usuario);
+   
+    
   });
-};
+}
 
-// ** Guardar o actualizar usuario **
+//  Función para actualizar la tabla dinámicamente
+const actualizar_Tabla = async () => {
+  
+    const usuariosActualizados = await actualizarTabla();
+    const tBody = tabla.querySelector("tbody");
+    tBody.innerHTML = ""; // Limpia la tabla antes de actualizar
+
+    usuariosActualizados.forEach(usuario => {
+      crearFila(usuario); // Usa la función existente para agregar filas
+    });
+ 
+  }
+
+//  Ejecutar la actualización cada 1 segundos
+setInterval(actualizar_Tabla, 1000);
+
+// // Llamar a la función cuando se carga la página
+// document.addEventListener("DOMContentLoaded", () => {
+//   actualizar_Tabla();
+// });
+
+
+const crearFila = ({ id, nombre, apellidos, telefono, correo, tipo_documento, documento }) => {
+
+  const tBody = tabla.querySelector("tbody");
+  const tr = tBody.insertRow(0);
+  const tdNombre = tr.insertCell(0);
+  const tdApellidos = tr.insertCell(1);
+  const tdTelefono = tr.insertCell(2);
+  const tdCorreo = tr.insertCell(3);
+  const tdDocumento = tr.insertCell(4);
+  const tdBotonera = tr.insertCell(5);
+  // Agregar el contenido a las celdas
+  tdNombre.textContent = nombre;
+  tdApellidos.textContent = apellidos;
+  tdTelefono.textContent = telefono;
+  tdCorreo.textContent = correo;
+  tdDocumento.textContent = documento;
+
+  const div = document.createElement("div");
+  const btnEliminar = document.createElement("button");
+  const btnEditar = document.createElement("button");
+
+  btnEditar.setAttribute("data-id", id)
+  btnEliminar.setAttribute("data-id", id)
+
+  btnEditar.textContent = "Editar";
+  btnEliminar.textContent = "Eliminar";
+
+  div.classList.add("botonera");
+  btnEditar.classList.add("btn", "btn--samall", "editar");
+  btnEliminar.classList.add("btn", "btn--samall", "btn--danger", "eliminar");
+  div.append(btnEditar, btnEliminar);
+  tdBotonera.append(div);
+
+  tr.setAttribute("id", `user_${id}`);
+
+}
+
+// Función asincrona para poder manipular las peticiones y guardar los datos del formulario
 const guardar = async (e) => {
+  // Detenemos el comportamiento por defecto del formulario
   e.preventDefault();
+  // Validamos que el formulario tenga datos
   const data = validar_campos(e.target);
-
-  if (!tiene_valores(data)) {
-    alert("Formulario incompleto");
-    return;
-  }
-
-  if (identificador.value) {
-    await actualizar_usuario(identificador.value, data);
-    alert("Usuario actualizado correctamente");
-  } else {
-    const respuesta = await guardar_usuario(data);
-    if (respuesta.status === 201) {
-      alert("Usuario guardado correctamente");
-      crearFila(respuesta.data);
+  // Validamos eu el objeto tenga los datos completos y no llegen vacios
+  if (tiene_valores(data)) {
+    // Validar que el formulario tenga un identificador
+    if (identificador.value) {
+      actualizar_usuario(identificador.value, data);
     } else {
-      alert("Error al guardar el usuario");
+      // Enviamos los datos al metodo guardar_usuario
+      const respuesta = await guardar_usuario(data);
+      // console.log(respuesta);
+      if (respuesta.status === 201) {
+        alert("Usuario guardado correctamente");
+        // Limpiamos el formulario
+        e.target.reset();
+        // Llamamos el metodo crearFila
+        crearFila(respuesta.data);
+
+      } else {
+        alert("Error al guardar el usuario");
+      }
     }
+  } else {
+    alert("Formulario incompleto");
   }
+}
 
-  e.target.reset();
-  cargar_tabla(); // Actualizar la tabla automáticamente
-};
+/**
+ * ****************************************
+ * Definimos los Eventos
+ * ****************************************
+ */
 
-// ** Eliminar usuario **
-document.addEventListener("click", async (e) => {
-  if (e.target.matches(".editar")) {
-    llenado(e);
-  }
-  if (e.target.matches(".eliminar")) {
-    const id = e.target.dataset.id;
-    await eliminar_usuario_por_id(id);
-    document.querySelector(`#user_${id}`).remove(); // Eliminar fila sin recargar
-  }
-});
-
-// ** Eventos **
+// Evento que se ejecuta cuando el documento se ha cargado
 document.addEventListener("DOMContentLoaded", () => {
   cargar_formulario();
+
   cargar_tabla();
+  actualizar_Tabla();
 });
 
-// ** Validaciones de entrada **
+document.addEventListener("click", async (e) => {
+  // Evento para el botón editar en latabla que creamos en el SENA
+  // Llamar la función para llenar el formulario
+  if (e.target.matches(".editar")) llenado(e);
+  if (e.target.matches(".eliminar")) {
+    eliminar_usuario_por_id(e.target.dataset.id);
+  }
+
+})
+
 nombre.addEventListener("keydown", son_letras);
 apellidos.addEventListener("keydown", son_letras);
 telefono.addEventListener("keydown", es_numero);
